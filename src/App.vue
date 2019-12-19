@@ -1,60 +1,54 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+  <div class="container">
+    <Header></Header>
+    <ProgressBar :maxQuote="maxQuote" :savedQuote="quotes.length"></ProgressBar>
+    <!-- <progress-bar ></progress-bar> -->
+    <new-quote @addQuote="addNewQuote($event)"></new-quote>
+    <quote-list :quotes="quotes" @delete="quoteDelete($event)"></quote-list>
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <div class="alert alert-info">Info: Click on a Quote to delete it!</div>
+      </div>
+    </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
+import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
+import ProgressBar from "./components/Quote/ProgressBar.vue";
+import NewQuote from './components/Quote/NewQuote.vue';
+import QuoteList from './components/Quote/QuoteList.vue';
+
 export default {
-  name: 'app',
-  data () {
+  data: function() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      maxQuote : 10,
+      quotes : ['First Quote'],
+    }
+  },
+  components: {
+    Header,
+    Footer,
+    ProgressBar,
+    NewQuote,
+    QuoteList
+  },
+  methods : {
+    addNewQuote(newQoute) {
+      if(this.quotes.length >= this.maxQuote){
+        alert('you can not enter more than 10 quotes')
+        return false;
+      }
+      this.quotes.push(newQoute);
+    },
+    quoteDelete(indexNo){
+      this.quotes.splice(indexNo, 1);
     }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
